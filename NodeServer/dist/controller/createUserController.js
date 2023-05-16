@@ -14,23 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const models_1 = require("../models/models");
-const registerFormValidator_1 = __importDefault(require("./helpers/registerFormValidator"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password } = req.body;
     try {
-        const validate = registerFormValidator_1.default.validate({ password });
-        if (validate.error) {
-            return res.status(400).json({ error: validate.error.details[0] });
-        }
-        const userEmailTaken = yield models_1.User.findOne({ email });
-        if (userEmailTaken)
-            return res.status(409).json({ error: 'A user with the same email already exist, please try another one' });
+        const { name, email, password } = req.body;
         const hashedPassword = bcrypt_1.default.hashSync(password, bcrypt_1.default.genSaltSync(10));
         const newUser = yield new models_1.User({ name, email, password: hashedPassword }).save();
         res.status(201).json({ newUser });
     }
     catch (error) {
         console.log(error);
+        res.status(500).json({
+            error: {
+                type: "ServerError",
+                details: error
+            }
+        });
     }
 });
 exports.default = createUser;
