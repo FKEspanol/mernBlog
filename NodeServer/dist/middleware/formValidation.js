@@ -12,16 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateCreateUserForm = void 0;
 const joi_1 = __importDefault(require("joi"));
 const models_1 = require("../models/models");
-class CustomClientError extends Error {
-    constructor(validationError, statusCode) {
-        super(validationError.message);
-        this.validationError = validationError;
-        this.type = "CustomClientError";
-        this.statusCode = statusCode;
-    }
-}
+const validator_1 = require("../helpers/validator");
 const schema = joi_1.default.object({
     name: joi_1.default.string()
         .pattern(/^[A-Za-z]+$/)
@@ -36,36 +30,41 @@ const schema = joi_1.default.object({
         .min(6)
         .required()
 });
-const validateRequestBody = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const requestBody = req.body;
-        const validate = schema.validate(requestBody);
+        const validate = schema.validate(requestBody, { abortEarly: false });
+        const listOfErrors = [];
         if (validate.error) {
-            const errorDetails = validate.error.details[0];
-            const validationError = {
-                key: (_a = errorDetails.context) === null || _a === void 0 ? void 0 : _a.key,
-                message: errorDetails.message,
-            };
-            throw new CustomClientError(validationError, 400);
+            validate.error.details.map(i => {
+                var _a;
+                listOfErrors.push({
+                    key: (_a = i.context) === null || _a === void 0 ? void 0 : _a.key,
+                    message: i.message
+                });
+            });
+            throw new validator_1.CustomClientError(listOfErrors, 400);
         }
         else {
             const userEmailIsTaken = yield models_1.User.findOne({ email: requestBody.email });
             if (userEmailIsTaken) {
-                const validationError = {
+                listOfErrors.push({
                     key: "email",
                     message: 'A user with the same email already exist, please try another one'
-                };
-                throw new CustomClientError(validationError, 409);
+                });
+                throw new validator_1.CustomClientError(listOfErrors, 409);
             }
             next();
         }
     }
     catch (error) {
-        if (error instanceof CustomClientError) {
+        if (error instanceof validator_1.CustomClientError) {
             console.error(error.message);
             res.status(error.statusCode).json({
-                error: Object.assign({ type: error.type }, error.validationError)
+                error: {
+                    type: error.type,
+                    errorList: [...error.errorList]
+                }
             });
         }
         else {
@@ -79,4 +78,11 @@ const validateRequestBody = (req, res, next) => __awaiter(void 0, void 0, void 0
         }
     }
 });
-exports.default = validateRequestBody;
+exports.validateCreateUserForm = validateCreateUserForm;
+const validateLoginForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+    }
+    catch (error) {
+    }
+});

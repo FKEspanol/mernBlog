@@ -1,23 +1,9 @@
 import { Request, Response } from "express";
 import Joi from "joi";
+
 import { User } from "../models/models";
+import { ValidationErrors, CustomClientError } from "../helpers/validator";
 
-interface ValidationError {
-    key: string, message: string
-}
-
-class CustomClientError extends Error {
-    public validationError: ValidationError;
-    public type: string;
-    public statusCode: number;
-
-    constructor(validationError: ValidationError, statusCode: number) {
-        super(validationError.message);
-            this.validationError = validationError;
-            this.type = "CustomClientError"
-            this.statusCode = statusCode
-    }
-}
 
 const schema = Joi.object({
     name: Joi.string()
@@ -37,27 +23,28 @@ const schema = Joi.object({
 
 });
 
-const validateRequestBody = async(req: Request, res: Response, next: Function) => {
+const validateCreateUserForm = async(req: Request, res: Response, next: Function) => {
     try {
         const requestBody = req.body;
-        const validate = schema.validate(requestBody);
+        const validate = schema.validate(requestBody, { abortEarly: false });
+        const listOfErrors: ValidationErrors[] = []
     
         if(validate.error) {
-            const errorDetails = validate.error.details[0];
-            const validationError: ValidationError = {
-                key: errorDetails.context?.key as string,
-                message: errorDetails.message,
-            }
-            throw new CustomClientError(validationError, 400)
+            validate.error.details.map(i => {
+                listOfErrors.push({
+                    key: i.context?.key as string,
+                    message: i.message
+                });
+            })
+            throw new CustomClientError(listOfErrors, 400)
         } else {
             const userEmailIsTaken = await User.findOne({ email: requestBody.email});
             if(userEmailIsTaken) {
-                const validationError: ValidationError = {
+                listOfErrors.push({
                     key: "email",
                     message: 'A user with the same email already exist, please try another one'
-                }
-
-                throw new CustomClientError(validationError, 409)
+                })
+                throw new CustomClientError(listOfErrors, 409)
             }
 
             next();
@@ -68,7 +55,7 @@ const validateRequestBody = async(req: Request, res: Response, next: Function) =
             res.status(error.statusCode).json({
                 error: {
                     type: error.type,
-                    ...error.validationError,
+                    errorList: [...error.errorList]
 
                 }
             })
@@ -84,4 +71,14 @@ const validateRequestBody = async(req: Request, res: Response, next: Function) =
     }
 }
 
-export default validateRequestBody;
+const validateLoginForm = async(req: Request, res: Response, next: Function) => {
+    try {
+        const {email, password} = req.body;
+
+        
+    } catch (error) {
+        
+    }
+}
+
+export {validateCreateUserForm};
