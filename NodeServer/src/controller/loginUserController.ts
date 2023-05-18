@@ -4,5 +4,9 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/models";
 
 const loginUser = async(req: Request, res: Response) => {
-    
+    try {
+        
+    } catch (error) {
+        
+    }
 }

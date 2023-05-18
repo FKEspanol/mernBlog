@@ -2,6 +2,12 @@ interface ValidationErrors {
     key: string, message: string
 }
 
+interface ErrorResponse {
+    code: number,
+    message: string,
+    details: {}
+}
+
 class CustomClientError extends Error {
     public errorList: ValidationErrors[];
     public type: string;
@@ -15,6 +21,8 @@ class CustomClientError extends Error {
     }
 }
 
+
+
 export {
-    ValidationErrors, CustomClientError
+    ValidationErrors, ErrorResponse, CustomClientError
 }

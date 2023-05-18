@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Joi from "joi";
 
 import { User } from "../models/models";
-import { ValidationErrors, CustomClientError } from "../helpers/validator";
+import { ValidationErrors, ErrorResponse, CustomClientError } from "../helpers/validator";
 
 
 const schema = Joi.object({
