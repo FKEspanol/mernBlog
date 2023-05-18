@@ -6,14 +6,18 @@ import mongoose from 'mongoose';
 
 import connectDB from './config/dbConfig';
 import router from './routes/createUser';
+import { errorLogs, requestLogs } from './middleware/logger';
 
-
-connectDB();
 const app = express();
 
+connectDB();
+
+
 app.use(cors());
+app.use(requestLogs)
 app.use(express.json());
 
+app.use(errorLogs)
 // routes
 app.use("/", router);
 

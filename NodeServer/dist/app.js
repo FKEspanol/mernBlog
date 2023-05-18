@@ -10,10 +10,13 @@ const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dbConfig_1 = __importDefault(require("./config/dbConfig"));
 const createUser_1 = __importDefault(require("./routes/createUser"));
-(0, dbConfig_1.default)();
+const logger_1 = require("./middleware/logger");
 const app = (0, express_1.default)();
+(0, dbConfig_1.default)();
 app.use((0, cors_1.default)());
+app.use(logger_1.requestLogs);
 app.use(express_1.default.json());
+app.use(logger_1.errorLogs);
 // routes
 app.use("/", createUser_1.default);
 mongoose_1.default.connection.once('open', () => {
