@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-    }
-    catch (error) {
-    }
+const models_1 = require("../models/models");
+exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const user = yield models_1.User.findOne({ email });
+    res.status(200).json(user);
 });

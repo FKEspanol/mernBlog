@@ -2,11 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomClientError = void 0;
 class CustomClientError extends Error {
-    constructor(errorList, statusCode) {
+    constructor(errorDetails, statusCode) {
         super("CustomClientError has occured");
-        this.errorList = errorList;
-        this.type = "CustomClientError";
-        this.statusCode = statusCode;
+        this.errorResponse = {
+            statusCode,
+            message: this.message,
+            details: {
+                errorDetails,
+            }
+        };
     }
 }
 exports.CustomClientError = CustomClientError;

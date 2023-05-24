@@ -5,7 +5,7 @@ import cors from "cors";
 import mongoose from 'mongoose';
 
 import connectDB from './config/dbConfig';
-import router from './routes/createUser';
+import router from './routes/signInSignUpForm';
 import { errorLogs, requestLogs } from './middleware/logger';
 
 const app = express();
@@ -21,8 +21,9 @@ app.use(errorLogs)
 // routes
 app.use("/", router);
 
+
 mongoose.connection.once('open', () => {
-    const serverPortNumber = process.env.NODEJS_SERVER_PORT_NUMBER;
+    const serverPortNumber = process.env.SERVER_PORT;
 
     console.log('Connected to MongoDB');
     app.listen(serverPortNumber, () => console.log(`Server is running on port ${serverPortNumber}`));

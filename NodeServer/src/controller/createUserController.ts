@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { User } from '../models/models';
 
 
-const createUser = async(req: Request, res: Response) => {    
+export default async(req: Request, res: Response) => {    
     try {
         const {name, email, password} = req.body;
         const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -21,5 +21,5 @@ const createUser = async(req: Request, res: Response) => {
     }
 }
 
-export default createUser;
+
 
