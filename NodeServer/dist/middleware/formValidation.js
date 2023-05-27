@@ -23,13 +23,11 @@ const schema = joi_1.default.object({
         .min(3)
         .max(30)
         .required(),
-    email: joi_1.default.string()
-        .email()
-        .required(),
+    email: joi_1.default.string().email().required(),
     password: joi_1.default.string()
-        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
         .min(6)
-        .required()
+        .required(),
 });
 const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -37,11 +35,11 @@ const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, voi
         const validate = schema.validate(requestBody, { abortEarly: false });
         const errorDetails = [];
         if (validate.error) {
-            validate.error.details.map(i => {
+            validate.error.details.map((i) => {
                 var _a;
                 errorDetails.push({
                     key: (_a = i.context) === null || _a === void 0 ? void 0 : _a.key,
-                    message: i.message
+                    message: i.message,
                 });
             });
             throw new validator_1.CustomClientError(errorDetails, 400);
@@ -51,7 +49,7 @@ const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, voi
             if (userEmailIsTaken) {
                 errorDetails.push({
                     key: "email",
-                    message: 'A user with the same email already exist, please try another one'
+                    message: "A user with the same email already exist, please try another one",
                 });
                 throw new validator_1.CustomClientError(errorDetails, 409);
             }
@@ -68,7 +66,9 @@ const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, voi
             res.status(500).json({
                 statusCode: 500,
                 message: "Server Error",
-                details: { errorDetails: [{ key: 'server', message: "Something went wrong in our server" }] }
+                errorProps: [
+                    { key: "server", message: "Something went wrong in our server" },
+                ],
             });
         }
     }
@@ -78,23 +78,31 @@ const validateLoginForm = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     try {
         const { email, password } = req.body;
         if (!email) {
-            const errorDetails = [{ key: 'email', message: 'Please enter your email' }];
+            const errorDetails = [
+                { key: "email", message: "Please enter your email" },
+            ];
             throw new validator_1.CustomClientError(errorDetails, 400);
         }
         else if (!password) {
-            const errorDetails = [{ key: 'password', message: 'Please enter your password' }];
+            const errorDetails = [
+                { key: "password", message: "Please enter your password" },
+            ];
             throw new validator_1.CustomClientError(errorDetails, 400);
         }
         else {
             const emailExist = yield models_1.User.findOne({ email });
             if (!emailExist) {
-                const errorDetails = [{ key: 'email', message: 'That email is not registered' }];
+                const errorDetails = [
+                    { key: "email", message: "That email is not registered" },
+                ];
                 throw new validator_1.CustomClientError(errorDetails, 404);
             }
             else {
                 const passwordMatched = yield bcrypt_1.default.compare(password, emailExist.password);
                 if (!passwordMatched) {
-                    const errorDetails = [{ key: 'password', message: 'Password does not match' }];
+                    const errorDetails = [
+                        { key: "password", message: "Password does not match" },
+                    ];
                     throw new validator_1.CustomClientError(errorDetails, 400);
                 }
                 else {
@@ -113,7 +121,9 @@ const validateLoginForm = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             res.status(500).json({
                 statusCode: 500,
                 message: "Server Error",
-                details: { errorDetails: [{ key: 'server', message: "Something went wrong in our server" }] }
+                errorProps: [
+                    { key: "server", message: "Something went wrong in our server" },
+                ],
             });
         }
     }

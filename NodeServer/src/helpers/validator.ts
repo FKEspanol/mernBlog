@@ -1,33 +1,27 @@
 interface ValidationErrors {
-    key: string, message: string
+  key: string;
+  message: string;
 }
 
 interface ErrorResponse {
-    statusCode: number,
-    message: string,
-    details: {
-        errorDetails: ValidationErrors[]
-    }
+  type: string;
+  statusCode: number;
+  message: string;
+  errorProps: ValidationErrors[];
 }
 
 class CustomClientError extends Error {
-    public errorResponse: ErrorResponse;
+  public errorResponse: ErrorResponse;
 
-    constructor(errorDetails: ValidationErrors[], statusCode: number) {
-        super("CustomClientError has occured");
-            this.errorResponse = {
-                statusCode,
-                message: this.message,
-                details: {
-                    errorDetails,
-
-                }
-            }
-    }
+  constructor(errorProps: ValidationErrors[], statusCode: number) {
+    super("CustomClientError has occured");
+    this.errorResponse = {
+      type: "error",
+      statusCode,
+      message: this.message,
+      errorProps,
+    };
+  }
 }
 
-
-
-export {
-    ValidationErrors, ErrorResponse, CustomClientError
-}
+export { ValidationErrors, ErrorResponse, CustomClientError };

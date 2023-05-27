@@ -1,14 +1,19 @@
-import { useState, useEffect } from 'react'
+import { Route, Routes } from "react-router-dom";
 
+import Header from "./components/Header";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 
 function App() {
-  
-  
   return (
     <>
-      <h1 className='text-4xl uppercase font-bold text-red-500'>Hello World</h1>
+      <Header />
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

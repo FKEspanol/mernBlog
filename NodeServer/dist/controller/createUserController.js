@@ -18,16 +18,20 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password } = req.body;
         const hashedPassword = bcrypt_1.default.hashSync(password, bcrypt_1.default.genSaltSync(10));
-        const newUser = yield new models_1.User({ name, email, password: hashedPassword }).save();
-        res.status(201).json({ newUser });
+        const newUser = yield new models_1.User({
+            name,
+            email,
+            password: hashedPassword,
+        }).save();
+        res.status(201).json({ newUser, type: "success" });
     }
     catch (error) {
         console.log(error);
         res.status(500).json({
             error: {
                 type: "ServerError",
-                details: error
-            }
+                details: error,
+            },
         });
     }
 });
