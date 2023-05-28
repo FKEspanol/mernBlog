@@ -53,9 +53,9 @@ function SignUp() {
       <form
         onSubmit={onSubmit}
         onChange={onChange}
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-10 py-20 border border-primary rounded-xl"
+        className="bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-10 py-20 border border-primary rounded-xl"
       >
-        <h3 className="text-3xl text-white font-bold mb-4">Sign Up</h3>
+        <h3 className="text-3xl font-bold mb-4">Sign Up</h3>
         <div className="block mb-5 w-96">
           <div className="relative" data-te-input-wrapper-init>
             <input
