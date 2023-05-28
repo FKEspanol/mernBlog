@@ -1,45 +1,93 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input, Ripple, initTE } from "tw-elements";
+
+import DisplayFormErrorMessage from "../reusable/DisplayErrorMsg";
+
+import ApiError from "../helper/handleApiError";
+
+const API = import.meta.env;
+let formBody = {};
+
 const SignIn = () => {
+  const [errors, setErrors] = useState();
+
+  const onChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    formBody = {
+      ...formBody,
+      [name]: value,
+    };
+  };
+  console.log("run");
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${API.VITE_SERVER}/${API.VITE_LOGINUSER}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(formBody),
+      });
+
+      const data = await res.json();
+      if (data.type === "error") {
+        setErrors([...data.errorProps]);
+        throw new ApiError(data);
+      }
+      console.log(data);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.log(error.message);
+        console.log(error.errorResponse);
+      }
+    }
+  };
   useEffect(() => {
     initTE({ Input, Ripple });
   }, []);
   return (
     <div className="bg-secondary absolute inset-0">
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={onSubmit}
+        onChange={onChange}
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-10 py-20 border border-primary rounded-xl"
       >
         <h3 className="text-3xl text-white font-bold mb-4">Sign In</h3>
-        <div className="relative mb-3 w-96" data-te-input-wrapper-init>
-          <input
-            type="email"
-            className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-            id="emailInput"
-            name="email"
-            placeholder="Example label"
-          />
-          <label
-            htmlFor="emailInput"
-            className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-          >
-            Email
-          </label>
+        <div className="block mb-5 w-96">
+          <div className="relative" data-te-input-wrapper-init>
+            <input
+              type="email"
+              className="peer tw-input"
+              id="emailInput"
+              name="email"
+              placeholder="Example label"
+            />
+            <label htmlFor="emailInput" className="input-label">
+              Email
+            </label>
+          </div>
+          {errors && (
+            <DisplayFormErrorMessage inputName="email" errors={errors} />
+          )}
         </div>
-        <div className="relative mb-3" data-te-input-wrapper-init>
-          <input
-            type="password"
-            className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-            id="passwordInput"
-            name="password"
-            placeholder="Example label"
-          />
-          <label
-            htmlFor="passwordInput"
-            className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-          >
-            Password
-          </label>
+        <div className="block mb-5 w-96">
+          <div className="relative" data-te-input-wrapper-init>
+            <input
+              type="password"
+              className="peer tw-input"
+              id="passwordInput"
+              name="password"
+              placeholder="Example label"
+            />
+            <label htmlFor="passwordInput" className="input-label">
+              Password
+            </label>
+          </div>
+          {errors && (
+            <DisplayFormErrorMessage inputName="password" errors={errors} />
+          )}
         </div>
         <button
           type="submit"

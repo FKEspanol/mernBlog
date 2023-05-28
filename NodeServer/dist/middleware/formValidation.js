@@ -35,11 +35,14 @@ const validateCreateUserForm = (req, res, next) => __awaiter(void 0, void 0, voi
         const validate = schema.validate(requestBody, { abortEarly: false });
         const errorDetails = [];
         if (validate.error) {
+            console.log(validate.error);
             validate.error.details.map((i) => {
-                var _a;
+                var _a, _b;
                 errorDetails.push({
                     key: (_a = i.context) === null || _a === void 0 ? void 0 : _a.key,
-                    message: i.message,
+                    message: i.type === "string.pattern.base"
+                        ? `${(_b = i.context) === null || _b === void 0 ? void 0 : _b.key} must not contain numbers or special characters`
+                        : i.message,
                 });
             });
             throw new validator_1.CustomClientError(errorDetails, 400);

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const DisplayFormErrorMessage = ({ inputName, errors }) => {
   let message;
   errors.forEach((err) => {

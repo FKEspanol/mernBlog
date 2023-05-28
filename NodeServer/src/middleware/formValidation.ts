@@ -35,10 +35,14 @@ const validateCreateUserForm = async (
     const errorDetails: ValidationErrors[] = [];
 
     if (validate.error) {
+      console.log(validate.error);
       validate.error.details.map((i) => {
         errorDetails.push({
           key: i.context?.key as string,
-          message: i.message,
+          message:
+            i.type === "string.pattern.base"
+              ? `${i.context?.key} must not contain numbers or special characters`
+              : i.message,
         });
       });
 

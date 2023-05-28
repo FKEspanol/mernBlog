@@ -10,9 +10,6 @@ let formBody = {};
 
 function SignUp() {
   const [errors, setErrors] = useState();
-  const [invalidName, setInvalidName] = useState();
-  const [invalidEmail, setInvalidEmail] = useState();
-  const [invalidPassword, setInvalidPassword] = useState();
 
   const onChange = (e) => {
     e.preventDefault();
@@ -59,18 +56,15 @@ function SignUp() {
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-10 py-20 border border-primary rounded-xl"
       >
         <h3 className="text-3xl text-white font-bold mb-4">Sign Up</h3>
-        <div className="block mb-5">
-          <div className="relative w-96" data-te-input-wrapper-init>
+        <div className="block mb-5 w-96">
+          <div className="relative" data-te-input-wrapper-init>
             <input
               type="text"
-              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              className="peer tw-input"
               id="nameInput"
               name="name"
             />
-            <label
-              htmlFor="nameInput"
-              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-            >
+            <label htmlFor="nameInput" className="input-label">
               Name
             </label>
           </div>
@@ -79,18 +73,15 @@ function SignUp() {
             <DisplayFormErrorMessage inputName="name" errors={errors} />
           )}
         </div>
-        <div className="block mb-5">
-          <div className="relative w-96" data-te-input-wrapper-init>
+        <div className="block mb-5 w-96">
+          <div className="relative" data-te-input-wrapper-init>
             <input
               type="email"
-              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              className="peer tw-input"
               id="emailInput"
               name="email"
             />
-            <label
-              htmlFor="emailInput"
-              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-            >
+            <label htmlFor="emailInput" className="input-label">
               Email
             </label>
           </div>
@@ -98,18 +89,15 @@ function SignUp() {
             <DisplayFormErrorMessage inputName="email" errors={errors} />
           )}
         </div>
-        <div className="block mb-5">
+        <div className="block mb-5 w-96">
           <div className="relative" data-te-input-wrapper-init>
             <input
               type="password"
-              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              className="peer tw-input"
               id="passwordInput"
               name="password"
             />
-            <label
-              htmlFor="passwordInput"
-              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-            >
+            <label htmlFor="passwordInput" className="input-label">
               Password
             </label>
           </div>
