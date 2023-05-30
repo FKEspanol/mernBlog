@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Define User schema
 const userSchema = new mongoose.Schema({
@@ -7,13 +7,17 @@ const userSchema = new mongoose.Schema({
   password: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  refreshToken: {
+    type: String,
+    default: null,
+  },
 });
 
 // Define Post schema
 const postSchema = new mongoose.Schema({
   title: String,
   content: String,
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   tags: [String],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -21,8 +25,8 @@ const postSchema = new mongoose.Schema({
 
 // Define Comment schema
 const commentSchema = new mongoose.Schema({
-  postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   content: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -43,16 +47,10 @@ const tagSchema = new mongoose.Schema({
 });
 
 // Create models from the defined schemas
-const User = mongoose.model('User', userSchema);
-const Post = mongoose.model('Post', postSchema);
-const Comments = mongoose.model('Comments', commentSchema);
-const Category = mongoose.model('Category', categorySchema);
-const Tag = mongoose.model('Tag', tagSchema);
+const User = mongoose.model("User", userSchema);
+const Post = mongoose.model("Post", postSchema);
+const Comments = mongoose.model("Comments", commentSchema);
+const Category = mongoose.model("Category", categorySchema);
+const Tag = mongoose.model("Tag", tagSchema);
 
- export {
-  User,
-  Post,
-  Comments,
-  Category,
-  Tag,
-};
+export { User, Post, Comments, Category, Tag };
