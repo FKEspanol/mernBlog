@@ -37,6 +37,7 @@ const SignIn = () => {
         throw new ApiError(data);
       }
       console.log(data);
+      console.log("hello yashi");
     } catch (error) {
       if (error instanceof ApiError) {
         console.log(error.message);
